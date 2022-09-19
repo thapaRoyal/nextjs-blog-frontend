@@ -22,6 +22,7 @@ const BlogCard = ({ article }: IPropType) => {
             src={`http://localhost:1337${article.attributes.author.data.attributes.avatar.data.attributes.formats.thumbnail.url}`}
             height={40}
             width={40}
+            alt="avatar"
           />
         </div>
         <span className="text-sm font-bold text-gray-600">
@@ -31,6 +32,10 @@ const BlogCard = ({ article }: IPropType) => {
             {formatDate(article.attributes.createdAt)}
           </span>
         </span>
+      </div>
+      <div className="text-gray-500">
+        {article.attributes.shortDescription.slice(0, 250)}{' '}
+        {article.attributes.shortDescription.length > 250 ? '...' : ''}
       </div>
     </div>
   );
