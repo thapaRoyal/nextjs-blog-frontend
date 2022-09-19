@@ -2,8 +2,8 @@ import { AxiosResponse } from 'axios';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Tabs from '../components/Tabs';
-import { fetchCategories } from '../http';
-import { ICategory, ICollectionResponse } from '../types';
+import { fetchArticles, fetchCategories } from '../http';
+import { IArticle, ICategory, ICollectionResponse } from '../types';
 
 interface IPropTypes {
   categories: {
@@ -23,14 +23,16 @@ const Home: NextPage<IPropTypes> = ({ categories }) => {
 
       <Tabs categories={categories.items} />
 
-      <main>
-        <h1 className="text-primary-dark">Welcome to .blog</h1>
-      </main>
+      {/* Articles */}
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  // Articles
+  const { data: articles }: AxiosResponse<ICollectionResponse<IArticle[]>> =
+    await fetchArticles();
+
   // categories
   const { data: categories }: AxiosResponse<ICollectionResponse<ICategory[]>> =
     await fetchCategories();
