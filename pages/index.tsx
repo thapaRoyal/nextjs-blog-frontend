@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import Tabs from '../components/Tabs';
 import { fetchCategories } from '../http';
 import { ICategory, ICollectionResponse } from '../types';
 
@@ -20,9 +21,7 @@ const Home: NextPage<IPropTypes> = ({ categories }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {categories.items.map((category) => {
-        return <span>{category.attributes.Title}</span>;
-      })}
+      <Tabs categories={categories.items} />
 
       <main>
         <h1 className="text-primary-dark">Welcome to .blog</h1>
