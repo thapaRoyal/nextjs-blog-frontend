@@ -11,6 +11,7 @@ import {
   IPagination,
 } from '../../types';
 import qs from 'qs';
+import ArticleList from '../../components/ArticleList';
 
 interface IPropType {
   categories: {
@@ -35,6 +36,7 @@ const category = ({ categories, articles }: IPropType) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Tabs categories={categories.items} />
+      <ArticleList articles={articles.items} />
     </>
   );
 };
