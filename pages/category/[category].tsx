@@ -12,6 +12,7 @@ import {
 } from '../../types';
 import qs from 'qs';
 import ArticleList from '../../components/ArticleList';
+import { makeCategory } from '../../utils';
 
 interface IPropType {
   categories: {
@@ -22,11 +23,12 @@ interface IPropType {
     items: IArticle[];
     pagination: IPagination;
   };
+  slug: string;
 }
 
-const category = ({ categories, articles }: IPropType) => {
+const category = ({ categories, articles, slug }: IPropType) => {
   const formattedCategory = () => {
-    return 'test';
+    return makeCategory(slug);
   };
   return (
     <>
@@ -70,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
         items: articles.data,
         pagination: articles.meta.pagination,
       },
+      slug: query.category,
     },
   };
 };
