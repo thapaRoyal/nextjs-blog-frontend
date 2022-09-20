@@ -9,9 +9,11 @@ import {
   ICategory,
   ICollectionResponse,
   IPagination,
+  IQueryOptions,
 } from '../types';
 import qs from 'qs';
 import Pagination from '../components/Pagination';
+import { useRouter } from 'next/router';
 
 interface IPropTypes {
   categories: {
@@ -24,7 +26,13 @@ interface IPropTypes {
 }
 
 const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
+  const router = useRouter();
   const { page, pageCount } = articles.pagination;
+
+  const handleSearch = (query: string) => {
+    router.push(`/?search=${query}`);
+  };
+
   return (
     <div>
       <Head>
@@ -33,7 +41,7 @@ const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* Tabs */}
-      <Tabs categories={categories.items} />
+      <Tabs categories={categories.items} handleOnSearch={handleSearch} />
 
       {/* Articles */}
       <ArticleList articles={articles.items} />
@@ -46,14 +54,22 @@ const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   // Articles
-  const options = {
+  const options: Partial<IQueryOptions> = {
     populate: ['author.avatar'],
     sort: ['id:desc'],
     pagination: {
-      page: query.page ? query.page : 1,
+      page: query.page ? +query.page : 1,
       pageSize: 5,
     },
   };
+
+  if (query.search) {
+    options.filters = {
+      Title: {
+        $containsi: query.search,
+      },
+    };
+  }
 
   const queryString = qs.stringify(options);
 
@@ -64,7 +80,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { data: categories }: AxiosResponse<ICollectionResponse<ICategory[]>> =
     await fetchCategories();
 
-  console.log('Categories', categories);
   return {
     props: {
       categories: {
