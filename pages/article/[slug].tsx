@@ -6,7 +6,9 @@ import qs from 'qs';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { formatDate } from '../../utils';
+import { formatDate, serializeMarkdown } from '../../utils';
+import { MDXRemote } from 'next-mdx-remote';
+import { MDXRemoteSerializeResult } from 'next-mdx-remote';
 
 interface IPropType {
   article: IArticle;
@@ -51,7 +53,9 @@ const slug = ({ article, notFound = false }: IPropType) => {
               src={`${process.env.API_BASE_URL}${article.attributes.Image.data.attributes.url}`}
               alt={article.attributes.Title}
             />
-            {article.attributes.body}
+            <MDXRemote
+              {...(article.attributes.body as MDXRemoteSerializeResult)}
+            />
           </div>
         </div>
         <div>RIGHT</div>
@@ -83,7 +87,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      article: articles.data[0],
+      article: await serializeMarkdown(articles.data[0]),
     },
   };
 };
