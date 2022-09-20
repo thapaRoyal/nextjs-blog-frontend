@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+}
