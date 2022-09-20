@@ -14,6 +14,7 @@ import {
 import qs from 'qs';
 import Pagination from '../components/Pagination';
 import { useRouter } from 'next/router';
+import { debounce } from '../utils';
 
 interface IPropTypes {
   categories: {
@@ -41,7 +42,10 @@ const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* Tabs */}
-      <Tabs categories={categories.items} handleOnSearch={handleSearch} />
+      <Tabs
+        categories={categories.items}
+        handleOnSearch={debounce(handleSearch, 500)}
+      />
 
       {/* Articles */}
       <ArticleList articles={articles.items} />
