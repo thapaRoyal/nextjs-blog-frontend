@@ -6,6 +6,7 @@ import Tabs from '../components/Tabs';
 import { fetchArticles, fetchCategories } from '../http';
 import { IArticle, ICategory, ICollectionResponse } from '../types';
 import qs from 'qs';
+import Pagination from '../components/Pagination';
 
 interface IPropTypes {
   categories: {
@@ -30,6 +31,9 @@ const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
 
       {/* Articles */}
       <ArticleList articles={articles.items} />
+
+      {/* Pagination */}
+      <Pagination />
     </div>
   );
 };
