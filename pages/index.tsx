@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     sort: ['id:desc'],
     pagination: {
       page: query.page ? query.page : 1,
-      pageSize: 1,
+      pageSize: 5,
     },
   };
 

@@ -13,6 +13,7 @@ import {
 import qs from 'qs';
 import ArticleList from '../../components/ArticleList';
 import { capitalizeFirstLetter, makeCategory } from '../../utils';
+import Pagination from '../../components/Pagination';
 
 interface IPropType {
   categories: {
@@ -27,6 +28,7 @@ interface IPropType {
 }
 
 const category = ({ categories, articles, slug }: IPropType) => {
+  const { page, pageCount } = articles.pagination;
   const formattedCategory = () => {
     return capitalizeFirstLetter(makeCategory(slug));
   };
@@ -39,6 +41,7 @@ const category = ({ categories, articles, slug }: IPropType) => {
       </Head>
       <Tabs categories={categories.items} />
       <ArticleList articles={articles.items} />
+      <Pagination page={page} pageCount={pageCount} />
     </>
   );
 };
@@ -51,6 +54,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       category: {
         slug: query.category,
       },
+    },
+    pagination: {
+      page: query.page ? query.page : 1,
+      pageSize: 5,
     },
   };
 
