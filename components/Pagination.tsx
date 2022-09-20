@@ -1,13 +1,18 @@
 import React from 'react';
 import { TDirection } from '../types';
 
-const Pagination = () => {
+interface IPropType {
+  page: number;
+  pageCount: number;
+}
+
+const Pagination = ({ page, pageCount }: IPropType) => {
   const isNextDisabled = (): boolean => {
-    return false;
+    return page >= pageCount;
   };
 
   const isPrevDisabled = (): boolean => {
-    return true;
+    return page <= 1;
   };
 
   const handlePaginate = async (direction: TDirection) => {
