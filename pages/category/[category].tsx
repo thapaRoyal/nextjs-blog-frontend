@@ -9,6 +9,7 @@ import {
   ICategory,
   ICollectionResponse,
   IPagination,
+  IQueryOptions,
 } from '../../types';
 import qs from 'qs';
 import ArticleList from '../../components/ArticleList';
@@ -37,7 +38,7 @@ const category = ({ categories, articles, slug }: IPropType) => {
     return capitalizeFirstLetter(makeCategory(slug));
   };
   const handleSearch = (query: string) => {
-    router.push(`/?search=${query}`);
+    router.push(`/category/${categorySlug}/?search=${query}`);
   };
   return (
     <>
@@ -61,7 +62,7 @@ const category = ({ categories, articles, slug }: IPropType) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const options = {
+  const options: IQueryOptions = {
     populate: ['author.avatar'],
     sort: ['id:desc'],
     filters: {
@@ -70,10 +71,18 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       },
     },
     pagination: {
-      page: query.page ? query.page : 1,
-      pageSize: 5,
+      page: query.page ? +query.page : 1,
+      pageSize: 1,
     },
   };
+
+  if (query.search) {
+    options.filters = {
+      Title: {
+        $containsi: query.search,
+      },
+    };
+  }
 
   const queryString = qs.stringify(options);
 
